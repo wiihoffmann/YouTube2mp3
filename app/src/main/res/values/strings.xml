@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">YouTube2mp3</string>
+    <string name="URL" >enter a URL</string>
 </resources>

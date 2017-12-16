@@ -16,21 +16,24 @@
             android:layout_height="22dp" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/URLBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Enter a playlist or video URL"
+            android:inputType="text"
+            android:text="@string/URL"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="0dp" />
+            tools:layout_editor_absoluteY="0dp"
+            tools:text="@string/URL" />
 
         <Button
+            android:id="@+id/downloadButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="download"
             android:text="Download" />
     </LinearLayout>
 
