@@ -4,7 +4,6 @@ package com.example.josh.youtube2mp3;
         import android.os.Bundle;
         import android.util.Log;
         import android.view.View;
-        import android.widget.Button;
         import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
@@ -15,16 +14,26 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-
     }
 
-    public void download(View v){
+    public void downloadOne(View v) {
+        //select the text field
         EditText text = findViewById(R.id.URLBox);
+        //get the text form the field
         String str = text.getText().toString();
-        Log.d("#######################", str);
+
+        download dwnld = new download();
+        dwnld.setType(1);
+
+        dwnld.execute(str);
+
+
 
     }
 
+    public void downloadAll(View v){
 
+
+    }
 
 }
