@@ -32,7 +32,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void downloadAll(View v){
+        //select the text field
+        EditText text = findViewById(R.id.URLBox);
+        //get the text form the field
+        String str = text.getText().toString();
 
+        download dwnld = new download();
+        dwnld.setType(2);
+
+        dwnld.execute(str);
 
     }
 

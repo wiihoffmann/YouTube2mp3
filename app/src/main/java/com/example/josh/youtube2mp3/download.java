@@ -7,7 +7,7 @@ import android.util.Log;
  * Created by Josh on 2017-12-16.
  */
 
-class download extends AsyncTask<String, Integer, Integer> {
+class download extends AsyncTask<String, Integer, Void> {
 
     //type =1 is single download, type=2 is download all
     private int type;
@@ -16,8 +16,7 @@ class download extends AsyncTask<String, Integer, Integer> {
         type = i;
     }
 
-
-    protected Integer doInBackground(String... urls) {
+    protected Void doInBackground(String... urls) {
         URLTranslator URLT = new URLTranslator();
 
         switch(type){
@@ -30,14 +29,16 @@ class download extends AsyncTask<String, Integer, Integer> {
 
         }
 
-        return 1;
+        return null;
     }
 
     protected void onProgressUpdate(Integer... progress) {
+
 
     }
 
     protected void onPostExecute(Integer result) {
         Log.d("#######################", "asdasdasdasd" );
+
     }
 }
