@@ -37,7 +37,8 @@ class download extends AsyncTask<String, Integer, Void> {
 
     }
 
-    protected void onPostExecute(Integer result) {
+
+    protected void onPostExecute(Void Result) {
         Log.d("#######################", "asdasdasdasd" );
 
     }
