@@ -29,7 +29,3 @@ task clean(type: Delete) {
 repositories {
     mavenCentral()
 }
-
-dependencies {
-    compile 'com.google.apis:google-api-services-youtube:v3-rev189-1.23.0'
-}
