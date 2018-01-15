@@ -25,8 +25,9 @@ public class MainActivity extends AppCompatActivity {
         download dwnld = new download();
         dwnld.setType(1);
 
-        dwnld.execute(str);
-
+       // dwnld.execute(str);
+        Object[] data = {"https://www.youtube.com/watch?v=O1M1Y9b1fgs&index=1&list=PLZIM5Rh7FjGDqCFH9fIpyCm4VT4aI1zt3",getApplicationContext()};
+        dwnld.execute(data);
 
 
     }
@@ -40,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
         download dwnld = new download();
         dwnld.setType(2);
 
-        dwnld.execute(str);
-
+        //dwnld.execute(str);
+        dwnld.execute("https://www.youtube.com/watch?v=O1M1Y9b1fgs&index=40&list=PLZIM5Rh7FjGDqCFH9fIpyCm4VT4aI1zt3");
     }
 
 

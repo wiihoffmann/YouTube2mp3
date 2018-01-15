@@ -1,5 +1,6 @@
 package com.example.josh.youtube2mp3;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -11,7 +12,7 @@ import java.io.IOException;
  * Created by Josh on 2017-12-16.
  */
 
-class download extends AsyncTask<String, Integer, Void> {
+class download extends AsyncTask<Object, Integer, Void> {
 
     //type =1 is single download, type=2 is download all
     private int type;
@@ -20,13 +21,13 @@ class download extends AsyncTask<String, Integer, Void> {
         type = i;
     }
 
-    protected Void doInBackground(String... urls) {
+    protected Void doInBackground(Object... urls) {
         URLTranslator URLT = new URLTranslator();
 
         switch(type){
             case 1:
                 try {
-                    URLT.downloadOne(urls[0]);
+                    URLT.downloadOne((String)urls[0],(Context)urls[1]);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {
@@ -34,7 +35,13 @@ class download extends AsyncTask<String, Integer, Void> {
                 }
                 break;
             case 2:
-                URLT.downloadAll(urls[0]);
+                try {
+                    URLT.downloadAll((String)urls[0]);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
 
         }
