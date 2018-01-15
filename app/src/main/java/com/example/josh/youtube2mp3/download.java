@@ -36,7 +36,7 @@ class download extends AsyncTask<Object, Integer, Void> {
                 break;
             case 2:
                 try {
-                    URLT.downloadAll((String)urls[0]);
+                    URLT.downloadAll((String)urls[0],(Context)urls[1]);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (JSONException e) {

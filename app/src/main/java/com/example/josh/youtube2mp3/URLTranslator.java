@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 public class URLTranslator{
 
@@ -25,32 +27,43 @@ public class URLTranslator{
     public  void downloadOne(String url, Context context) throws IOException, JSONException {
         Uri uri = Uri.parse(url);
         this.context = context;
+        String title = "save";
+
+        System.out.println(url);
+
+
         if(url.contains("list=")) {
             int index = Integer.parseInt(uri.getQueryParameter("index"));
-            String listId = uri.getQueryParameter("list");
-            ArrayList videoIds = translate(listId, index);
-            download(videoIds.get(0).toString());
+            String playlistId = uri.getQueryParameter("list");
+            ArrayList[] ids = translate(playlistId, index);
+            ArrayList videoIds = ids[0];
+            ArrayList titles = ids[1];
+            download(videoIds.get(0).toString(), title);
 
         }else if(url.contains("https://www.youtube.com/watch?v=")){
-            download(uri.getQueryParameter("v"));
+            download(uri.getQueryParameter("v"), title);
+        }else{
+            download((url.substring(url.lastIndexOf("/")+1)), title);
         }
-
-
-
     }
 
-    public  void downloadAll(String url) throws IOException, JSONException {
+    public  void downloadAll(String url, Context context) throws IOException, JSONException {
         Uri uri = Uri.parse(url);
+        this.context = context;
         String playlistID = uri.getQueryParameter("list");
 
-        ArrayList videoIDs = translate(playlistID, -1);
-        for(int i = 0;i<videoIDs.size();i++){
-            download(videoIDs.get(i).toString());
+        ArrayList[] ids = translate(playlistID, -1);
+        ArrayList videoIds = ids[0];
+        ArrayList titles = ids[1];
+
+        for(int i = 0;i<videoIds.size();i++){
+
+            download(videoIds.get(i).toString(),titles.get(i).toString());
         }
 
     }
 
-    private ArrayList translate(String playlistID, int index) throws IOException, JSONException {
+    private ArrayList[] translate(String playlistID, int index) throws IOException, JSONException {
         URLConnection rawData = new URL("https://www.googleapis.com/youtube/v3/playlistItems?playlistId="+playlistID+"&maxResults=50&part=snippet%2CcontentDetails&key="+key).openConnection();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(rawData.getInputStream()));
         String jsonString = "";
@@ -63,23 +76,24 @@ public class URLTranslator{
 
         JSONArray videos = json.getJSONArray("items");
 
-        ArrayList ids = new ArrayList();
+        ArrayList videoIds = new ArrayList();
+        ArrayList titles = new ArrayList();
 
         if (index == -1){
             for(int i=0; i<videos.length();i++){
                 JSONObject x = (JSONObject) videos.get(i);
-                ids.add(x.getJSONObject("contentDetails").get("videoId"));
-
+                videoIds.add(x.getJSONObject("contentDetails").get("videoId"));
+                titles.add(x.getJSONObject("snippet").get("title"));
             }
         }else{
             JSONObject x = (JSONObject)videos.get(index-1);
-            ids.add(x.getJSONObject("contentDetails").get("videoId"));
+            videoIds.add(x.getJSONObject("contentDetails").get("videoId"));
         }
-        return ids;
+        return new ArrayList[]{videoIds, titles};
 
     }
 
-    private void download(String videoID) throws IOException, JSONException {
+    private void download(String videoID, String title) throws IOException, JSONException {
         URLConnection rawData = new URL("https://youtubetoany.com/@api/json/mp3/"+videoID).openConnection();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(rawData.getInputStream()));
         String jsonString = "";
@@ -93,24 +107,26 @@ public class URLTranslator{
 
         String downloadLink = "Http:"+ json.getJSONObject("vidInfo").getJSONObject("2").get("dloadUrl");
 
+        /*
         URL download = new URL(downloadLink);
         InputStream in = download.openStream();
         File mp3 = new File(String.valueOf(context.getExternalFilesDir(null)  ), "save.mp3");
         FileOutputStream fos = new FileOutputStream(mp3);
+
 
         int i;
         byte[] b = new byte[4096];
         while ((i = in.read(b)) != -1) {
             fos.write(b, 0, i);
         }
+*/
 
-        /*
-                URL download = new URL(downloadLink);
+        URL download = new URL(downloadLink);
         ReadableByteChannel rbc = Channels.newChannel(download.openStream());
-        File mp3 = new File(String.valueOf(context.getExternalFilesDir(null)  ), "save.mp3");
+        File mp3 = new File(String.valueOf(context.getExternalFilesDir(null)),title+".mp3");
         FileOutputStream fos = new FileOutputStream(mp3);
         fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-         */
+        fos.close();
 
     }
 
